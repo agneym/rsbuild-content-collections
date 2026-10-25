@@ -1,0 +1,43 @@
+{
+  "name": "@agney/rsbuild-content-collections",
+  "version": "0.0.0",
+  "description": "Use Content Collections with Rsbuild (unofficial)",
+  "license": "MIT",
+  "author": "Agney Menon",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsdown src/index.ts --format esm --dts -d dist",
+    "lint": "oxlint",
+    "format": "oxfmt",
+    "test": "vitest --run"
+  },
+  "dependencies": {
+    "@content-collections/integrations": "^0.5.0"
+  },
+  "devDependencies": {
+    "@content-collections/core": "^0.15.3",
+    "@rsbuild/core": "^2.2.12",
+    "@types/node": "^24.0.0",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
+    "tsdown": "^0.15.12",
+    "typescript": "^5.5.4",
+    "vitest": "^5.0.5"
+  },
+  "peerDependencies": {
+    "@content-collections/core": "^0.x",
+    "@rsbuild/core": "^1.0.0 || ^2.0.0"
+  }
+}
