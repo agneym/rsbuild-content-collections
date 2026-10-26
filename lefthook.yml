@@ -1,0 +1,9 @@
+pre-commit:
+  commands:
+    format:
+      glob: "*.{ts,js,json,md}"
+      run: bunx oxfmt {staged_files}
+      stage_fixed: true
+    lint:
+      glob: "*.{ts,js}"
+      run: bun run lint

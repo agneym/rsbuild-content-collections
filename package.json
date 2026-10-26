@@ -21,7 +21,8 @@
     "build": "tsdown src/index.ts --format esm --dts --no-fixed-extension -d dist",
     "lint": "oxlint",
     "format": "oxfmt",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "prepare": "lefthook install"
   },
   "dependencies": {
     "@content-collections/integrations": "^0.5.0"
@@ -30,6 +31,7 @@
     "@content-collections/core": "^0.15.3",
     "@rsbuild/core": "^2.2.12",
     "@types/node": "^24.0.0",
+    "lefthook": "^2.2.2",
     "oxfmt": "^0.72.0",
     "oxlint": "^1.87.0",
     "tsdown": "^0.23.2",
