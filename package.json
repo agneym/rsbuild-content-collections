@@ -24,8 +24,8 @@
   "scripts": {
     "build": "tsdown src/index.ts --format esm --dts --no-fixed-extension -d dist",
     "lint": "oxlint",
-    "format": "oxfmt",
-    "format:check": "oxfmt --check",
+    "format": "bun fmt",
+    "format:check": "bun fmt --check",
     "test": "vitest --run",
     "prepare": "lefthook install"
   },
@@ -37,7 +37,6 @@
     "@rsbuild/core": "^2.2.12",
     "@types/node": "^24.0.0",
     "lefthook": "^2.2.2",
-    "oxfmt": "^0.72.0",
     "oxlint": "^1.87.0",
     "tsdown": "^0.23.2",
     "typescript": "^7.0.2",
