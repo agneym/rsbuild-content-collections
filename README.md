@@ -15,5 +15,7 @@ export default defineConfig({
 
 Options:
 
-- `configPath`: path to the Content Collections config (default `content-collections.ts`).
-- `isEnabled`: `(config) => boolean`, called with the final Rsbuild config; return `false` to skip building and watching.
+| Option       | Type                                           | Default                    | Description                                                                                                          |
+| ------------ | ---------------------------------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `configPath` | `string`                                       | `"content-collections.ts"` | Path to the Content Collections config, relative to the Rsbuild root.                                                |
+| `isEnabled`  | `(config: Readonly<RsbuildConfig>) => boolean` | always enabled             | Called with the final Rsbuild config; return `false` to skip building and watching. The alias is applied either way. |
