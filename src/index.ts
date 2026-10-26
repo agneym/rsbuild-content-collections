@@ -25,6 +25,12 @@ export function pluginContentCollections(
       let enabled = true;
       let unsubscribe: (() => Promise<void>) | undefined;
 
+      const stopWatching = async () => {
+        const stop = unsubscribe;
+        unsubscribe = undefined;
+        await stop?.();
+      };
+
       const build = async () => {
         const builder = await createBuilder(resolvedConfigPath);
         configureLogging(builder);
@@ -49,9 +55,16 @@ export function pluginContentCollections(
         },
       });
 
-      api.onBeforeBuild(async ({ isFirstCompile }) => {
-        if (enabled && isFirstCompile) await build();
+      api.onBeforeBuild(async ({ isFirstCompile, isWatch }) => {
+        if (!enabled || !isFirstCompile) return;
+        const builder = await build();
+        if (isWatch) {
+          const subscription = await builder.watch();
+          unsubscribe = () => subscription.unsubscribe();
+        }
       });
+
+      api.onCloseBuild(stopWatching);
 
       api.onBeforeStartDevServer(async () => {
         if (!enabled) return;
@@ -59,9 +72,7 @@ export function pluginContentCollections(
         unsubscribe = () => subscription.unsubscribe();
       });
 
-      api.onCloseDevServer(async () => {
-        await unsubscribe?.();
-      });
+      api.onCloseDevServer(stopWatching);
     },
   };
 }

@@ -65,6 +65,30 @@ describe("pluginContentCollections", () => {
     expect(mocks.watch).not.toHaveBeenCalled();
   });
 
+  it("watches during a watch build and unsubscribes on close", async () => {
+    const rsbuild = await createInstance();
+    const { close } = await rsbuild.build({ watch: true });
+
+    // In watch mode the compile hooks run asynchronously after build() resolves.
+    await vi.waitFor(() => expect(mocks.watch).toHaveBeenCalledOnce());
+    expect(mocks.build).toHaveBeenCalledOnce();
+    expect(mocks.unsubscribe).not.toHaveBeenCalled();
+
+    await close();
+
+    expect(mocks.unsubscribe).toHaveBeenCalledOnce();
+  });
+
+  it("does not watch a watch build when isEnabled returns false", async () => {
+    const rsbuild = await createInstance({ isEnabled: () => false });
+    const { close } = await rsbuild.build({ watch: true });
+    await close();
+
+    expect(mocks.build).not.toHaveBeenCalled();
+    expect(mocks.watch).not.toHaveBeenCalled();
+    expect(mocks.unsubscribe).not.toHaveBeenCalled();
+  });
+
   it("resolves a custom configPath against the project root", async () => {
     const rsbuild = await createInstance({ configPath: "config/cc.ts" });
     await rsbuild.build();
