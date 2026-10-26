@@ -1,6 +1,6 @@
 {
   "name": "@agney/rsbuild-content-collections",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Use Content Collections with Rsbuild (unofficial)",
   "license": "MIT",
   "author": "Agney Menon",
