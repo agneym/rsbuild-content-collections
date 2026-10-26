@@ -21,6 +21,7 @@
     "build": "tsdown src/index.ts --format esm --dts --no-fixed-extension -d dist",
     "lint": "oxlint",
     "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "test": "vitest --run",
     "prepare": "lefthook install"
   },
