@@ -13,4 +13,7 @@ export default defineConfig({
 });
 ```
 
-Options: `configPath` (default `content-collections.ts`).
+Options:
+
+- `configPath`: path to the Content Collections config (default `content-collections.ts`).
+- `isEnabled`: `(config) => boolean`, called with the final Rsbuild config; return `false` to skip building and watching.

@@ -113,4 +113,54 @@ describe("pluginContentCollections", () => {
 
     expect(mocks.unsubscribe).toHaveBeenCalledOnce();
   });
+
+  describe("isEnabled", () => {
+    it("receives the Rsbuild config", async () => {
+      const isEnabled = vi.fn(() => true);
+      const rsbuild = await createInstance({ isEnabled });
+      await rsbuild.build();
+
+      expect(isEnabled).toHaveBeenCalledOnce();
+      expect(isEnabled).toHaveBeenCalledWith(
+        expect.objectContaining({ plugins: expect.any(Array) }),
+      );
+    });
+
+    it("skips building when it returns false", async () => {
+      const rsbuild = await createInstance({ isEnabled: () => false });
+      await rsbuild.build();
+
+      expect(mocks.createBuilder).not.toHaveBeenCalled();
+      expect(mocks.build).not.toHaveBeenCalled();
+    });
+
+    it("skips building and watching in dev when it returns false", async () => {
+      const rsbuild = await createInstance({ isEnabled: () => false });
+      const { server } = await rsbuild.startDevServer({
+        getPortSilently: true,
+      });
+      await server.close();
+
+      expect(mocks.createBuilder).not.toHaveBeenCalled();
+      expect(mocks.watch).not.toHaveBeenCalled();
+      expect(mocks.unsubscribe).not.toHaveBeenCalled();
+    });
+
+    it("still applies the alias when it returns false", async () => {
+      const rsbuild = await createInstance({ isEnabled: () => false });
+      await rsbuild.initConfigs();
+      const config = rsbuild.getNormalizedConfig();
+
+      expect(config.resolve?.alias).toMatchObject({
+        "content-collections": path.join(root, ".content-collections/generated"),
+      });
+    });
+
+    it("builds when it returns true", async () => {
+      const rsbuild = await createInstance({ isEnabled: () => true });
+      await rsbuild.build();
+
+      expect(mocks.build).toHaveBeenCalledOnce();
+    });
+  });
 });
