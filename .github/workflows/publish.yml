@@ -16,12 +16,14 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: jdx/mise-action@v2
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2
         with:
           install: true
-          cache: true
-      - uses: actions/setup-node@v4
+          cache: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 26
           registry-url: https://registry.npmjs.org
@@ -30,14 +32,14 @@ jobs:
       - run: bun run format:check
       - run: bun run build
       - run: bun run test
+      # Authenticates via npm trusted publishing (OIDC); no token needed.
+      # Provenance is attached automatically.
       - name: Publish to npm if version is new
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           name=$(node -p "require('./package.json').name")
           version=$(node -p "require('./package.json').version")
           if npm view "$name@$version" version >/dev/null 2>&1; then
             echo "$name@$version already published; skipping."
           else
-            npm publish --access public --provenance
+            npm publish --access public
           fi
