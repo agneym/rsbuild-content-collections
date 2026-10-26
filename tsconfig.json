@@ -7,8 +7,10 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "isolatedModules": true,
+    "isolatedDeclarations": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "declaration": true,
     "noEmit": true
   },
   "include": ["src"]
