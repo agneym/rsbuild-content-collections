@@ -23,7 +23,7 @@ jobs:
           cache: true
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 26
           registry-url: https://registry.npmjs.org
       - run: bun install --frozen-lockfile --ignore-scripts
       - run: bun run lint
