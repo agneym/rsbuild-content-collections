@@ -4,6 +4,10 @@
   "description": "Use Content Collections with Rsbuild (unofficial)",
   "license": "MIT",
   "author": "Agney Menon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agneym/rsbuild-content-collections.git"
+  },
   "files": [
     "dist"
   ],
