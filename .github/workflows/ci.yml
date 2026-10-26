@@ -18,6 +18,9 @@ jobs:
         with:
           install: true
           cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
       - run: bun install --frozen-lockfile --ignore-scripts
       - run: bun run lint
       - run: bun run format:check
