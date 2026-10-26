@@ -1,4 +1,4 @@
-import { createBuilder } from "@content-collections/core";
+import { createBuilder, type Builder } from "@content-collections/core";
 import { configureLogging } from "@content-collections/integrations";
 import type { RsbuildConfig, RsbuildPlugin } from "@rsbuild/core";
 import path from "node:path";
@@ -32,10 +32,21 @@ export function pluginContentCollections(
       };
 
       const build = async () => {
+        console.log(
+          "Starting content-collections with config",
+          path.relative(process.cwd(), resolvedConfigPath),
+        );
         const builder = await createBuilder(resolvedConfigPath);
         configureLogging(builder);
+        console.log("Start initial build");
         await builder.build();
         return builder;
+      };
+
+      const watch = async (builder: Builder) => {
+        console.log("Start watching");
+        const subscription = await builder.watch();
+        unsubscribe = () => subscription.unsubscribe();
       };
 
       api.modifyRsbuildConfig({
@@ -58,18 +69,14 @@ export function pluginContentCollections(
       api.onBeforeBuild(async ({ isFirstCompile, isWatch }) => {
         if (!enabled || !isFirstCompile) return;
         const builder = await build();
-        if (isWatch) {
-          const subscription = await builder.watch();
-          unsubscribe = () => subscription.unsubscribe();
-        }
+        if (isWatch) await watch(builder);
       });
 
       api.onCloseBuild(stopWatching);
 
       api.onBeforeStartDevServer(async () => {
         if (!enabled) return;
-        const subscription = await (await build()).watch();
-        unsubscribe = () => subscription.unsubscribe();
+        await watch(await build());
       });
 
       api.onCloseDevServer(stopWatching);
